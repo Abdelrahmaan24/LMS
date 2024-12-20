@@ -3,23 +3,17 @@ package com.example.demo.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // Specify table name explicitly
+//@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
     private String email;
     private String password;
-
-    @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
-    private Long id;
 
     @Enumerated(EnumType.STRING)
     private Role role;
