@@ -21,8 +21,6 @@ public class Course {
 
     private String duration;
 
-    private String instructorName;
-
     @ElementCollection
     private List<String> mediaFiles;
 
@@ -31,6 +29,7 @@ public class Course {
     private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Enrollment> enrollments;
 
     @ManyToOne
@@ -79,14 +78,6 @@ public class Course {
 
     public void setDuration(String duration) {
         this.duration = duration;
-    }
-
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
     }
 
     public List<String> getMediaFiles() {

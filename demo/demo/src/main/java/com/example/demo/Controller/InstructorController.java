@@ -4,6 +4,8 @@ package com.example.demo.Controller;
 import com.example.demo.Models.Course;
 import com.example.demo.Models.Instructor;
 import com.example.demo.Models.Lesson;
+import com.example.demo.Models.Student;
+import com.example.demo.Services.CourseServices;
 import com.example.demo.Services.InstructorServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class InstructorController {
 
     @Autowired
     private InstructorServices instructorServices;
+
+    @Autowired
+    private CourseServices courseServices;
 
 
     // get all Instructors
@@ -94,5 +99,30 @@ public class InstructorController {
             @RequestBody Lesson lesson) {
         Lesson createdLesson = instructorServices.addLessonToCourse(instructorId, courseId, lesson);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
+    }
+
+
+
+    // get all students enrolled in course
+    @GetMapping(value = "/courses/{courseId}/students")
+    public ResponseEntity<List<Student>> getStudentsByCourseId(@PathVariable Long courseId) {
+        List<Student> students = courseServices.getStudentsByCourseId(courseId);
+        return ResponseEntity.ok(students);
+    }
+
+
+    // Remove student from course (with instructor validation)
+    @DeleteMapping(value = "/{instructorId}/courses/{courseId}/students/{studentId}")
+    public ResponseEntity<Void> removeStudentFromCourse(
+            @PathVariable Long instructorId,
+            @PathVariable Long courseId,
+            @PathVariable Long studentId) {
+
+        try {
+            instructorServices.removeStudentFromCourse(instructorId, studentId, courseId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Forbidden if the instructor is not authorized
+        }
     }
 }

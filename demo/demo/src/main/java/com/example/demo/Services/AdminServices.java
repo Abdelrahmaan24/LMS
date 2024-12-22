@@ -36,7 +36,6 @@ public class AdminServices {
         existingCourse.setDescription(updatedCourse.getDescription());
         existingCourse.setDuration(updatedCourse.getDuration());
         existingCourse.setMediaFiles(updatedCourse.getMediaFiles());
-        existingCourse.setInstructorName(updatedCourse.getInstructorName());
 
         return courseRepo.save(existingCourse);
     }

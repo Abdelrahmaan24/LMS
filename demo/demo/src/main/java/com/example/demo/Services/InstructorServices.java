@@ -1,11 +1,7 @@
 package com.example.demo.Services;
 
-import com.example.demo.Models.Course;
-import com.example.demo.Models.Instructor;
-import com.example.demo.Models.Lesson;
-import com.example.demo.Repository.CourseRepo;
-import com.example.demo.Repository.InstructorRepo;
-import com.example.demo.Repository.LessonRepo;
+import com.example.demo.Models.*;
+import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,6 +21,12 @@ public class InstructorServices{
 
     @Autowired
     private LessonRepo lessonRepo;
+
+    @Autowired
+    private EnrollmentRepo enrollmentRepo;
+
+    @Autowired
+    private StudentRepo studentRepo;
 
     public Instructor updateInstructor(Instructor instructor, Long id) {
         Optional<Instructor> existingInstructorOpt = instructorRepo.findById(id);
@@ -100,7 +102,6 @@ public class InstructorServices{
         existingCourse.setDescription(updatedCourse.getDescription());
         existingCourse.setDuration(updatedCourse.getDuration());
         existingCourse.setMediaFiles(updatedCourse.getMediaFiles());
-        existingCourse.setInstructorName(updatedCourse.getInstructorName());
 
         return courseRepo.save(existingCourse);
     }
@@ -149,5 +150,44 @@ public class InstructorServices{
 
         // Save the lesson
         return lessonRepo.save(lesson);
+    }
+
+
+    // Method to remove a student from a course, with instructor validation
+    public void removeStudentFromCourse(Long instructorId, Long studentId, Long courseId) {
+        Optional<Course> courseOpt = courseRepo.findById(courseId);
+        Optional<Instructor> instructorOpt = instructorRepo.findById(instructorId);
+        Optional<Student> studentOpt = studentRepo.findById(studentId);
+
+        if (!courseOpt.isPresent()) {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+
+        if (!instructorOpt.isPresent()) {
+            throw new RuntimeException("Instructor not found with ID: " + instructorId);
+        }
+
+        if (!studentOpt.isPresent()) {
+            throw new RuntimeException("Student not found with ID: " + studentId);
+        }
+
+        Course course = courseOpt.get();
+        Instructor instructor = instructorOpt.get();
+        Student student = studentOpt.get();
+
+        // Ensure the instructor is the one assigned to the course
+        if (!course.getInstructor().getId().equals(instructor.getId())) {
+            throw new RuntimeException("Instructor not authorized to remove students from this course.");
+        }
+
+        // Find the enrollment associated with the student and course
+        Enrollment enrollment = enrollmentRepo.findByStudentAndCourse(student, course);
+
+        if (enrollment != null) {
+            // Remove the enrollment
+            enrollmentRepo.delete(enrollment);
+        } else {
+            throw new RuntimeException("Enrollment not found for student and course");
+        }
     }
 }

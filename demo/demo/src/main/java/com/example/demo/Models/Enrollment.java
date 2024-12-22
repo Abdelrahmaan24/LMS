@@ -1,9 +1,15 @@
 package com.example.demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Entity
+//@Setter
+//@Getter
 @Table(name = "Enrollment")
 public class Enrollment {
 
@@ -13,10 +19,12 @@ public class Enrollment {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonBackReference
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     private String status; // e.g., "active", "completed", "dropped"

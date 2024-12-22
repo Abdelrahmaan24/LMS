@@ -1,12 +1,15 @@
 package com.example.demo.Services;
 
 import com.example.demo.Models.Course;
+import com.example.demo.Models.Enrollment;
 import com.example.demo.Models.Lesson;
+import com.example.demo.Models.Student;
 import com.example.demo.Repository.CourseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServices {
@@ -44,4 +47,15 @@ public class CourseServices {
 
         return lesson;
     }
-}
+
+
+    public List<Student> getStudentsByCourseId(Long courseId) {
+            Course course = courseRepo.findById(courseId)
+                    .orElseThrow(() -> new RuntimeException("Course with ID " + courseId + " not found."));
+            return course.getEnrollments().stream()
+                    .map(Enrollment::getStudent)
+                    .collect(Collectors.toList());
+        }
+    }
+
+
