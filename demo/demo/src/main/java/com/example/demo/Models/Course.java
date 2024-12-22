@@ -3,18 +3,15 @@ package com.example.demo.Models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-//@Table(name = "Courses")
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(unique = true)
     private String title;
@@ -22,25 +19,34 @@ public class Course {
     @Column(length = 1000)
     private String description;
 
-    private String duration; // e.g., "10 weeks", "3 months"
+    private String duration;
 
     private String instructorName;
 
     @ElementCollection
-    private List<String> mediaFiles; // List of media file URLs (videos, PDFs, etc.)
+    private List<String> mediaFiles;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<Lesson> lessons; // Represents lessons in the course
+    private List<Lesson> lessons;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Enrollment> enrollments; // Represents students enrolled in the course
-
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     @JsonBackReference
     private Instructor instructor;
+
+    // Add a helper method to get students
+    public List<Student> getStudents() {
+        if (enrollments == null) {
+            return null;
+        }
+        return enrollments.stream()
+                .map(Enrollment::getStudent) // Fetch the student from each enrollment
+                .collect(Collectors.toList());
+    }
 
     // Getters and Setters
     public Long getId() {

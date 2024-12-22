@@ -1,37 +1,64 @@
 package com.example.demo.Models;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-public class Student extends User {
+@Table(name = "students")
+public class Student {
 
-    private int age;
-    private LocalDate dob;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Student() {
-        super();
+    @Column(nullable = false)
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments; // Track enrollments for the student
+
+    // No-argument constructor
+    public Student() {}
+
+    // Parameterized constructor
+    public Student(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
-    public Student(Long id, String name, String email, String password, Role role, int age, LocalDate dob) {
-        super(name, email, password, id, role);
-        this.age = age;
-        this.dob = dob;
+    // Getters and Setters
+    public Long getId() {
+        return id;
     }
 
-    public int getAge() {
-        return age;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public String getName() {
+        return name;
     }
 
-    public LocalDate getDob() {
-        return dob;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 }

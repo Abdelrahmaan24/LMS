@@ -1,4 +1,5 @@
 package com.example.demo.Models;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,14 +25,19 @@ public class Assignment {
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     private List<Submission> submissions;
 
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
     // No-argument constructor
     public Assignment() {}
 
     // Parameterized constructor
-    public Assignment(String title, String description, LocalDateTime dueDate) {
+    public Assignment(String title, String description, LocalDateTime dueDate, Course course) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.course = course;
     }
 
     // Getters and setters
@@ -73,5 +79,13 @@ public class Assignment {
 
     public void setSubmissions(List<Submission> submissions) {
         this.submissions = submissions;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
