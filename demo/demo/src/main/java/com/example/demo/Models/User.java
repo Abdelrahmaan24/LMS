@@ -3,8 +3,8 @@ package com.example.demo.Models;
 import jakarta.persistence.*;
 
 @Entity
-//@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -18,8 +18,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {
-    }
+    public User() {}
 
     public User(String name, String email, String password, Long id, Role role) {
         this.name = name;
@@ -27,6 +26,15 @@ public class User {
         this.password = password;
         this.id = id;
         this.role = role;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -51,14 +59,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Role getRole() {

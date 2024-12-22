@@ -1,11 +1,10 @@
 package com.example.demo.Repository;
 
-import com.example.demo.Models.Course;
+
+import com.example.demo.Models.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CourseRepo extends JpaRepository<Course, Long> {
-    boolean existsByTitle(String title);
-
+public interface AdminRepo extends JpaRepository<Admin, Long> {
 }

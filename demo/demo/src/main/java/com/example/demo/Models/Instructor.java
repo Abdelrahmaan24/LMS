@@ -1,38 +1,24 @@
 package com.example.demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-//@Table(name = "Instructors")
-public class Instructor {
+public class Instructor extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long instructorId;
-
-    @OneToMany(mappedBy = "instructor", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
-    private List<Course> courses; // Courses taught by the instructor
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Course> courses;
 
     public Instructor() {
         super();
     }
 
-    public Instructor(String name, String email, String password, Long id, Role role, List<Course> courses) {
-//        super(name, email, password, id, role);
+    public Instructor(Long instructorId, List<Course> courses, String name, String email, String password, Role role) {
+        super(name, email, password, instructorId, role);
         this.courses = courses;
-    }
-
-    // Getters and Setters
-
-
-    public Long getInstructorId() {
-        return instructorId;
-    }
-
-    public void setInstructorId(Long instructorId) {
-        this.instructorId = instructorId;
     }
 
     public List<Course> getCourses() {
@@ -41,5 +27,10 @@ public class Instructor {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.setInstructor(this);
     }
 }

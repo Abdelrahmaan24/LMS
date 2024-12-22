@@ -1,5 +1,7 @@
 package com.example.demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -13,6 +15,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(unique = true)
     private String title;
 
     @Column(length = 1000)
@@ -26,6 +30,7 @@ public class Course {
     private List<String> mediaFiles; // List of media file URLs (videos, PDFs, etc.)
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Lesson> lessons; // Represents lessons in the course
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -34,6 +39,7 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
+    @JsonBackReference
     private Instructor instructor;
 
     // Getters and Setters
@@ -107,5 +113,9 @@ public class Course {
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
+    }
+
+    public void addLesson(Lesson lesson) {
+        this.lessons.add(lesson);
     }
 }
