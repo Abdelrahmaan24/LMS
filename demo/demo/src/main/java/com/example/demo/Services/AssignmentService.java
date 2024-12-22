@@ -1,7 +1,6 @@
 package com.example.demo.Services;
 
 import com.example.demo.Models.Assignment;
-import com.example.demo.Models.Notification;
 import com.example.demo.Models.NotificationType;
 import com.example.demo.Models.Student;
 import com.example.demo.Repository.AssignmentRepository;
