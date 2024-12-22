@@ -95,6 +95,4 @@ public class InstructorController {
         Lesson createdLesson = instructorServices.addLessonToCourse(instructorId, courseId, lesson);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
     }
-
-
 }

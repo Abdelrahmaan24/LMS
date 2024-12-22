@@ -13,14 +13,37 @@ import java.util.List;
 @Service
 public class StudentServices {
 
-    private final StudentRepo studentRepo;
-
     @Autowired
-    public StudentServices(StudentRepo studentRepo) {
-        this.studentRepo = studentRepo;
+    private StudentRepo studentRepo;
+
+    // Create a new student
+    public Student createStudent(Student student) {
+        return studentRepo.save(student);
     }
 
-    public List<Student> getStudent() {
+    // Get a student by ID
+    public Student getStudentById(Long id) {
+        return studentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student with ID " + id + " not found."));
+    }
+
+    // Update a student
+    public Student updateStudent(Long id, Student updatedStudent) {
+        Student existingStudent = getStudentById(id);
+        existingStudent.setName(updatedStudent.getName());
+        existingStudent.setEmail(updatedStudent.getEmail());
+        existingStudent.setPassword(updatedStudent.getPassword());
+        return studentRepo.save(existingStudent);
+    }
+
+    // Delete a student
+    public void deleteStudent(Long id) {
+        Student student = getStudentById(id);
+        studentRepo.delete(student);
+    }
+
+    // Get all students
+    public List<Student> getAllStudents() {
         return studentRepo.findAll();
     }
 }
