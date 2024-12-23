@@ -10,4 +10,5 @@ import java.util.List;
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     List<Quiz> findByCourseId(Long courseId); // Use the courseId field
     List<Quiz> findByCourseIdIn(List<Long> courseIds);
+    List<Quiz> findByCourse_Enrollments_Student_Id(Long studentId);
 }
