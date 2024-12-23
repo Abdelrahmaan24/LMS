@@ -16,6 +16,10 @@ public class Instructor extends User {
     @JsonManagedReference
     private List<Course> courses;
 
+    public Instructor(Long id, String name, String email, String password, Role role, List<Course> courses) {
+        super(id, name, email, password, role);
+        this.courses = courses;
+    }
 
     public List<Course> getCourses() {
         return courses;
