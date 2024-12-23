@@ -17,11 +17,6 @@ public class Instructor extends User {
     private List<Course> courses;
 
 
-//    public Instructor(Long instructorId, List<Course> courses, String name, String email, String password, Role role) {
-//        super(name, email, password, instructorId, role);
-//        this.courses = courses;
-//    }
-
     public List<Course> getCourses() {
         return courses;
     }
