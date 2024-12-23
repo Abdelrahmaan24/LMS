@@ -14,6 +14,9 @@ public class Quiz {
 
     private Long courseId; // Add this field
 
+    public Quiz() {
+    }
+
     // Getters and setters
     public Long getId() {
         return id;
