@@ -4,6 +4,7 @@ package com.example.demo.Services;
 import com.example.demo.Models.*;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class AdminServices {
 
     @Autowired
     private CourseRepo courseRepo;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Course updateCourse(Long courseId, Course updatedCourse) {
         Optional<Course> existingCourseOpt = courseRepo.findById(courseId);
@@ -68,6 +71,7 @@ public class AdminServices {
 
     public Admin createAdmin(Admin admin) {
         if (admin.getRole() == Role.Admin) {
+            admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
             return adminRepo.save(admin);
         }
         throw new IllegalArgumentException("Only Admins can be created. Provided role: " + admin.getRole());
@@ -76,6 +80,7 @@ public class AdminServices {
     public Student createStudent(Student student) {
         // Check if the student's role is STUDENT
         if (student.getRole() == Role.Student) {
+            student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
             return studentRepo.save(student);
         }
         // If the role is not STUDENT, throw an exception
@@ -85,6 +90,7 @@ public class AdminServices {
 
     public Instructor createInstructor(Instructor instructor) {
         if (instructor.getRole() == Role.Instructor) {
+            instructor.setPassword(bCryptPasswordEncoder.encode(instructor.getPassword()));
             return instructorRepo.save(instructor);
         }
         throw new IllegalArgumentException("Only instructors can be created. Provided role: " + instructor.getRole());
