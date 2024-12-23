@@ -1,11 +1,10 @@
-package com.example.demo;
+package com.example.demo.Services;
 
 import com.example.demo.Models.Notification;
 import com.example.demo.Models.NotificationType;
 import com.example.demo.Models.Student;
 import com.example.demo.Models.User;
 import com.example.demo.Repository.NotificationsRepository;
-import com.example.demo.Services.NotificationsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -13,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
