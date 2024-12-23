@@ -12,7 +12,9 @@ public class Quiz {
 
     private String title;
 
-    private Long courseId; // Add this field
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false) // Establish proper relationship
+    private Course course;
 
     public Quiz() {
     }
@@ -33,12 +35,13 @@ public class Quiz {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public Long getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
+
+    
 }
