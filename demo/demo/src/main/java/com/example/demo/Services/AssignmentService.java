@@ -62,6 +62,12 @@ public class AssignmentService {
         // Fetch assignments for these courses
         return assignmentRepository.findByCourseIdIn(courseIds);
     }
+    public List<Assignment> getAssignmentsByStudentId(Long studentId) {
+        return assignmentRepository.findByCourse_Enrollments_Student_Id(studentId);
+    }
+    public List<Assignment> getAssignmentsByCourseId(Long courseId) {
+        return assignmentRepository.findByCourse_Id(courseId);
+    }
 
     // Delete an assignment and notify students
     public void deleteAssignment(Long id) {
