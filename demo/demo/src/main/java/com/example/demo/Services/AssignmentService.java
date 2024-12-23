@@ -4,6 +4,7 @@ import com.example.demo.Models.Assignment;
 import com.example.demo.Models.NotificationType;
 import com.example.demo.Models.Student;
 import com.example.demo.Repository.AssignmentRepository;
+import com.example.demo.Repository.EnrollmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class AssignmentService {
 
     @Autowired
     private NotificationsService notificationsService; // Add NotificationService
+    @Autowired
+    private EnrollmentRepo enrollmentRepository;
+
 
     // Create a new assignment and notify students
     public Assignment createAssignment(Assignment assignment) {
@@ -44,6 +48,13 @@ public class AssignmentService {
     // Get an assignment by ID
     public Assignment getAssignmentById(Long id) {
         return assignmentRepository.findById(id).orElse(null);
+    }
+    public List<Assignment> getAssignmentsForStudent(Long studentId) {
+        // Fetch the course IDs the student is enrolled in
+        List<Long> courseIds = enrollmentRepository.findCourseIdsByStudentId(studentId);
+
+        // Fetch assignments for these courses
+        return assignmentRepository.findByCourseIdIn(courseIds);
     }
 
     // Delete an assignment and notify students
