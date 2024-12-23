@@ -5,6 +5,9 @@ import com.example.demo.Models.Enrollment;
 import com.example.demo.Models.Student;
 import com.example.demo.Services.EnrollmentServices;
 import com.example.demo.Services.StudentServices;
+import com.example.demo.Models.Quiz;
+import com.example.demo.Models.Assignment;
+import com.example.demo.Models.Submission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +82,24 @@ public class StudentController {
     public ResponseEntity<List<Course>> getCoursesNotEnrolledByStudent(@PathVariable Long studentId) {
         List<Course> coursesNotEnrolled = studentService.getCoursesNotEnrolledByStudent(studentId);
         return ResponseEntity.ok(coursesNotEnrolled);
+    }
+      @GetMapping("/{studentId}/assignments")
+    public ResponseEntity<List<Assignment>> getAssignmentsForStudent(@PathVariable Long studentId) {
+        List<Assignment> assignments = studentService.getAssignmentsForStudent(studentId);
+        return ResponseEntity.ok(assignments);
+    }
+    @GetMapping("/{studentId}/quizzes")
+    public ResponseEntity<List<Quiz>> getQuizzesForStudent(@PathVariable Long studentId) {
+        List<Quiz> quizzes = studentService.getQuizzesForStudent(studentId);
+        return ResponseEntity.ok(quizzes);
+    } @PostMapping("/{studentId}/assignments/{assignmentId}/submit")
+    public ResponseEntity<Submission> submitAssignment(
+            @PathVariable Long studentId,
+            @PathVariable Long assignmentId,
+            @RequestBody Submission submission) {
+
+        Submission createdSubmission = studentService.submitAssignment(studentId, assignmentId, submission);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubmission);
     }
 
 }
