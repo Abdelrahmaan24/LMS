@@ -1,6 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Dto.CourseDto;
+import com.example.demo.Dto.InstructorDto;
+import com.example.demo.Dto.LessonDto;
 import com.example.demo.Models.Course;
 import com.example.demo.Models.Instructor;
 import com.example.demo.Models.Lesson;
@@ -52,7 +54,12 @@ public class InstructorController {
 
     // Update Instructor
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Instructor> updateInstructor(@RequestBody Instructor instructor, @PathVariable Long id){
+    public ResponseEntity<Instructor> updateInstructor(@RequestBody InstructorDto instructorDto, @PathVariable Long id){
+        Instructor instructor = new Instructor();
+        instructor.setName(instructorDto.getName());
+        instructor.setEmail(instructorDto.getEmail());
+        instructor.setPassword(instructorDto.getPassword());
+        instructor.setRole(instructorDto.getRole());
         return ResponseEntity.ok(instructorServices.updateInstructor(instructor, id));
     }
 
@@ -85,7 +92,14 @@ public class InstructorController {
 
     // Update Course
     @PutMapping(value = "/{instructorId}/courses/{courseId}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long instructorId, @PathVariable Long courseId, @RequestBody Course updatedCourse) {
+    public ResponseEntity<Course> updateCourse(@PathVariable Long instructorId, @PathVariable Long courseId, @RequestBody CourseDto courseDto) {
+        Course updatedCourse = new Course();
+        updatedCourse.setTitle(courseDto.getTitle());
+        updatedCourse.setDescription(courseDto.getDescription());
+        updatedCourse.setDuration(courseDto.getDuration());
+        updatedCourse.setMediaFiles(courseDto.getMediaFiles());
+        updatedCourse.setLessons(new ArrayList<Lesson>());
+        updatedCourse.setInstructor(instructorServices.getInstructorById(instructorId));
         Course course = instructorServices.updateCourse(instructorId, courseId, updatedCourse);
         return ResponseEntity.ok(course);
     }
@@ -104,7 +118,12 @@ public class InstructorController {
     public ResponseEntity<Lesson> addLessonToCourse(
             @PathVariable Long instructorId,
             @PathVariable Long courseId,
-            @RequestBody Lesson lesson) {
+            @RequestBody LessonDto lessonDto) {
+        Lesson lesson = new Lesson();
+        lesson.setTitle(lessonDto.getTitle());
+        lesson.setOtp(lessonDto.getOtp());
+        lesson.setCourse(courseServices.getCourseById(courseId));
+        lesson.setOtpStartTime(lessonDto.getOtpStartTime());
         Lesson createdLesson = instructorServices.addLessonToCourse(instructorId, courseId, lesson);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
     }

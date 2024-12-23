@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.CourseDto;
 import com.example.demo.Dto.InstructorDto;
 import com.example.demo.Dto.StudentDto;
 import com.example.demo.Models.*;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -39,7 +41,6 @@ public class AdminController {
         student.setEmail(studentDto.getEmail());
         student.setPassword(studentDto.getPassword());
         student.setRole(studentDto.getRole());
-
         Student createdStudent = adminServices.createStudent(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
     }
@@ -89,7 +90,13 @@ public class AdminController {
 
     // Update Course
     @PutMapping(value = "/courses/{courseId}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long courseId, @RequestBody Course updatedCourse) {
+    public ResponseEntity<Course> updateCourse(@PathVariable Long courseId, @RequestBody CourseDto courseDto) {
+        Course updatedCourse = new Course();
+        updatedCourse.setTitle(courseDto.getTitle());
+        updatedCourse.setDescription(courseDto.getDescription());
+        updatedCourse.setDuration(courseDto.getDuration());
+        updatedCourse.setMediaFiles(courseDto.getMediaFiles());
+        updatedCourse.setLessons(new ArrayList<Lesson>());
         Course course = adminServices.updateCourse(courseId, updatedCourse);
         return ResponseEntity.ok(course);
     }

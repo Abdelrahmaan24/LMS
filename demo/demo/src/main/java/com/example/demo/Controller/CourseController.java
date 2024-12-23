@@ -42,7 +42,12 @@ public class CourseController {
 
     // add lessson to a course
     @PostMapping("/{id}/lessons")
-    public ResponseEntity<Lesson> addLessonToCourse(@PathVariable Long id, @RequestBody Lesson lesson) {
+    public ResponseEntity<Lesson> addLessonToCourse(@PathVariable Long id, @RequestBody LessonDto lessonDto) {
+        Lesson lesson = new Lesson();
+        lesson.setTitle(lessonDto.getTitle());
+        lesson.setOtp(lessonDto.getOtp());
+        lesson.setCourse(courseServices.getCourseById(id));
+        lesson.setOtpStartTime(lessonDto.getOtpStartTime());
         Lesson addedLesson = courseServices.addLessonToCourse(id, lesson);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedLesson);
     }

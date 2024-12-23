@@ -20,7 +20,11 @@ public class lessonController {
 
     // Update a lesson
     @PutMapping("/{id}")
-    public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
+    public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody LessonDto lessonDto) {
+        Lesson lesson = new Lesson();
+        lesson.setTitle(lessonDto.getTitle());
+        lesson.setOtp(lessonDto.getOtp());
+        lesson.setOtpStartTime(lessonDto.getOtpStartTime());
         return ResponseEntity.ok(lessonServices.updateLesson(id, lesson));
     }
 

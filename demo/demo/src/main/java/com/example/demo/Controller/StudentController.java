@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.StudentDto;
 import com.example.demo.Models.Course;
 import com.example.demo.Models.Enrollment;
 import com.example.demo.Models.Student;
@@ -42,7 +43,12 @@ public class StudentController {
 
     // Update a student
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody StudentDto studentDto) {
+        Student updatedStudent = new Student();
+        updatedStudent.setName(studentDto.getName());
+        updatedStudent.setEmail(studentDto.getEmail());
+        updatedStudent.setPassword(studentDto.getPassword());
+        updatedStudent.setRole(studentDto.getRole());
         Student student = studentService.updateStudent(id, updatedStudent);
         return ResponseEntity.ok(student);
     }
@@ -83,16 +89,22 @@ public class StudentController {
         List<Course> coursesNotEnrolled = studentService.getCoursesNotEnrolledByStudent(studentId);
         return ResponseEntity.ok(coursesNotEnrolled);
     }
-      @GetMapping("/{studentId}/assignments")
+
+
+    @GetMapping("/{studentId}/assignments")
     public ResponseEntity<List<Assignment>> getAssignmentsForStudent(@PathVariable Long studentId) {
         List<Assignment> assignments = studentService.getAssignmentsForStudent(studentId);
         return ResponseEntity.ok(assignments);
     }
+
+
     @GetMapping("/{studentId}/quizzes")
     public ResponseEntity<List<Quiz>> getQuizzesForStudent(@PathVariable Long studentId) {
         List<Quiz> quizzes = studentService.getQuizzesForStudent(studentId);
         return ResponseEntity.ok(quizzes);
-    } @PostMapping("/{studentId}/assignments/{assignmentId}/submit")
+    }
+
+    @PostMapping("/{studentId}/assignments/{assignmentId}/submit")
     public ResponseEntity<Submission> submitAssignment(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId,
