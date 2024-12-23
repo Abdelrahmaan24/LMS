@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     // You can define custom queries here if needed
-      List<Assignment> findByCourseIdIn(List<Long> courseIds);
+    List<Assignment> findByCourseIdIn(List<Long> courseIds);
+    List<Assignment> findByCourse_Enrollments_Student_Id(Long studentId);
+    List<Assignment> findByCourse_Id(Long courseId);
 }
