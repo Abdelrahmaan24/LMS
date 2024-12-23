@@ -16,7 +16,6 @@ public class lessonController {
     @Autowired
     private LessonServices lessonServices;
 
-
     // Create a new lesson
     @PostMapping
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
@@ -46,5 +45,20 @@ public class lessonController {
     @GetMapping("/{id}")
     public ResponseEntity<Lesson> getLessonById(@PathVariable Long id) {
         return ResponseEntity.ok(lessonServices.getLessonById(id));
+    }
+
+    @PutMapping(path = "{lessonId}/generateOtp")
+    public ResponseEntity<String> generateOtp(@PathVariable Long lessonId) {
+        lessonServices.generateOtp(lessonId);
+        return ResponseEntity.ok("OTP generated");
+    }
+
+    @PutMapping(path = "{lessonId}/markAttendance")
+    public ResponseEntity<String> markAttendance(
+            @PathVariable Long lessonId,
+            @RequestParam Long studentId,
+            @RequestParam String otp) {
+        lessonServices.markAttendance(lessonId,studentId,otp);
+        return ResponseEntity.ok("Attendance marked");
     }
 }

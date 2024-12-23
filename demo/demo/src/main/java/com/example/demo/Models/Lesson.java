@@ -3,6 +3,10 @@ package com.example.demo.Models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 //@Table(name = "Lessons")
 public class Lesson {
@@ -12,12 +16,17 @@ public class Lesson {
 
     private String title;
 
+    // For attendance
+    private String otp;
+    private LocalDateTime otpStartTime;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     @JsonBackReference
     private Course course;
 
-
+    @OneToMany(mappedBy = "lesson")
+    private List<Attendance> attendanceList = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() {
@@ -42,6 +51,22 @@ public class Lesson {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public LocalDateTime getOtpStartTime() {
+        return otpStartTime;
+    }
+
+    public void setOtpStartTime(LocalDateTime otpStartTime) {
+        this.otpStartTime = otpStartTime;
     }
 }
 
