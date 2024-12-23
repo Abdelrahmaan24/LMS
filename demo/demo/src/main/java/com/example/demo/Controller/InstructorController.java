@@ -1,14 +1,11 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Dto.CourseDto;
-import com.example.demo.Dto.InstructorDto;
-import com.example.demo.Dto.LessonDto;
-import com.example.demo.Models.Course;
-import com.example.demo.Models.Instructor;
-import com.example.demo.Models.Lesson;
-import com.example.demo.Models.Student;
+import com.example.demo.Dto.*;
+import com.example.demo.Models.*;
+import com.example.demo.Services.AssignmentService;
 import com.example.demo.Services.CourseServices;
 import com.example.demo.Services.InstructorServices;
+import com.example.demo.Services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,10 @@ public class InstructorController {
 
     @Autowired
     private CourseServices courseServices;
+    @Autowired
+    private AssignmentService assignmentService;
+    @Autowired
+    private QuizService quizService;
 
 
     // get all Instructors
@@ -152,4 +153,31 @@ public class InstructorController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Forbidden if the instructor is not authorized
         }
     }
+
+
+    // Create a new assignment
+    @PostMapping(value = "/{Instructorid}/course/{Courseid}/assignmnet")
+    public ResponseEntity<Assignment> createAssignment(@PathVariable Long Instructorid, @PathVariable Long Courseid, @RequestBody AssignmentDto assignmentDto) {
+        Assignment assignment = new Assignment();
+        assignment.setTitle(assignmentDto.getTitle());
+        assignment.setDescription(assignmentDto.getDescription());
+        assignment.setDueDate(assignmentDto.getDueDate());
+        assignment.setCourse(courseServices.getCourseById(Courseid));
+        Assignment createdAssignment = assignmentService.createAssignment(assignment, Courseid);
+        return ResponseEntity.ok(createdAssignment);
+    }
+
+    // Create a new quiz
+    @PostMapping(value = "/{InstructorID}/Quiz")
+    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto, @PathVariable Long InstructorID) {
+        Quiz quiz = new Quiz();
+        quiz.setTitle(quizDto.getTitle());
+        quiz.setCourseId(quizDto.getCourseId());  // Use courseId from the body
+        Quiz createdQuiz = quizService.createQuiz(quiz);
+        return ResponseEntity.ok(createdQuiz);
+    }
+
+
+
+
 }

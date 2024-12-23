@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.AssignmentDto;
 import com.example.demo.Models.Assignment;
 import com.example.demo.Services.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,6 @@ public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
 
-    // Create a new assignment
-    @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@RequestBody Assignment assignment) {
-        Assignment createdAssignment = assignmentService.createAssignment(assignment);
-        return ResponseEntity.ok(createdAssignment);
-    }
 
     // Get all assignments
     @GetMapping

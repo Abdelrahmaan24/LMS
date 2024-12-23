@@ -1,6 +1,7 @@
 package com.example.demo.Services;
 
 import com.example.demo.Models.Assignment;
+import com.example.demo.Models.Course;
 import com.example.demo.Models.NotificationType;
 import com.example.demo.Models.Student;
 import com.example.demo.Repository.AssignmentRepository;
@@ -18,13 +19,18 @@ public class AssignmentService {
 
     @Autowired
     private NotificationsService notificationsService; // Add NotificationService
+
     @Autowired
     private EnrollmentRepo enrollmentRepository;
 
+    @Autowired
+    private CourseServices courseServices;
 
     // Create a new assignment and notify students
-    public Assignment createAssignment(Assignment assignment) {
+    public Assignment createAssignment(Assignment assignment, Long CourseId) {
         // Save the assignment
+        Course course = courseServices.getCourseById(CourseId);
+        assignment.setCourse(course);
         Assignment savedAssignment = assignmentRepository.save(assignment);
 
         // Notify students about the new assignment

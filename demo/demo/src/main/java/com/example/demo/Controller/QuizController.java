@@ -17,12 +17,12 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    // Create a new quiz
-    @PostMapping
-    public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
-        Quiz createdQuiz = quizService.createQuiz(quiz);
-        return ResponseEntity.ok(createdQuiz);
-    }
+//    // Create a new quiz
+//    @PostMapping
+//    public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
+//        Quiz createdQuiz = quizService.createQuiz(quiz);
+//        return ResponseEntity.ok(createdQuiz);
+//    }
 
     // Get all quizzes
     @GetMapping

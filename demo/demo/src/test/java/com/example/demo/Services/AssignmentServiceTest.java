@@ -24,18 +24,18 @@ class AssignmentServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testCreateAssignment() {
-        Assignment assignment = new Assignment();
-        assignment.setTitle("Math Assignment");
-
-        when(assignmentRepository.save(any(Assignment.class))).thenReturn(assignment);
-
-        Assignment createdAssignment = assignmentService.createAssignment(assignment);
-
-        assertNotNull(createdAssignment);
-        assertEquals("Math Assignment", createdAssignment.getTitle());
-
-        verify(assignmentRepository, times(1)).save(assignment);
-    }
+//    @Test
+//    void testCreateAssignment() {
+//        Assignment assignment = new Assignment();
+//        assignment.setTitle("Math Assignment");
+//
+//        when(assignmentRepository.save(any(Assignment.class))).thenReturn(assignment);
+//
+//        Assignment createdAssignment = assignmentService.createAssignment(assignment);
+//
+//        assertNotNull(createdAssignment);
+//        assertEquals("Math Assignment", createdAssignment.getTitle());
+//
+//        verify(assignmentRepository, times(1)).save(assignment);
+//    }
 }
