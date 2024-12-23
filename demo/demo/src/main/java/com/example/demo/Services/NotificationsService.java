@@ -16,9 +16,16 @@ public class NotificationsService {
     @Autowired
     private NotificationsRepository notificationRepo;
 
-    public void createNotification(Student student, String message, NotificationType type) {
+    public void createNotification(User user, String message, NotificationType type) {
+        if (user == null) {
+            throw new IllegalArgumentException("User doesn't exist");
+        }
+        System.out.println("User: " + user);
+        System.out.println("Message: " + message);
+        System.out.println("Type: " + type);
+
         Notification notification = new Notification();
-        notification.setUser(student);
+        notification.setUser(user);
         notification.setMessage(message);
         notification.setType(type);
         notification.setCreatedAt(java.time.LocalDateTime.now());
