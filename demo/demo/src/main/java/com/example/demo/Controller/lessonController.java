@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.LessonDto;
 import com.example.demo.Models.Lesson;
 import com.example.demo.Services.LessonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,6 @@ public class lessonController {
     @Autowired
     private LessonServices lessonServices;
 
-    // Create a new lesson
-    @PostMapping
-    public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(lessonServices.createLesson(lesson));
-    }
 
     // Update a lesson
     @PutMapping("/{id}")

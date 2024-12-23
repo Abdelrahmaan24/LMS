@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -75,6 +76,7 @@ public class InstructorController {
         course.setDescription(courseDto.getDescription());
         course.setDuration(courseDto.getDuration());
         course.setMediaFiles(courseDto.getMediaFiles());
+        course.setLessons(new ArrayList<Lesson>());
         course.setInstructor(instructorServices.getInstructorById(id));
         Course createdCourse = instructorServices.CreateCourse(id, course);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);

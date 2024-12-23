@@ -52,7 +52,6 @@ public class AdminController {
         instructor.setEmail(instructorDto.getEmail());
         instructor.setPassword(instructorDto.getPassword());
         instructor.setRole(instructorDto.getRole());
-
         Instructor createdInstructor = adminServices.createInstructor(instructor);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdInstructor);
 

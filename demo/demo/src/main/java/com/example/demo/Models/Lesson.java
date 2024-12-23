@@ -68,5 +68,13 @@ public class Lesson {
     public void setOtpStartTime(LocalDateTime otpStartTime) {
         this.otpStartTime = otpStartTime;
     }
+
+    public List<Attendance> getAttendanceList() {
+        return attendanceList;
+    }
+
+    public void setAttendanceList(List<Attendance> attendanceList) {
+        this.attendanceList = attendanceList;
+    }
 }
 
