@@ -1,6 +1,7 @@
 package com.example.demo.Models;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class Assignment {
     private List<Submission> submissions;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false)
+    @JsonBackReference
     private Course course;
 
     // No-argument constructor
