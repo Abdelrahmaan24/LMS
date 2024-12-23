@@ -168,12 +168,23 @@ public class InstructorController {
     }
 
     // Create a new quiz
-    @PostMapping(value = "/{InstructorID}/Quiz")
-    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto, @PathVariable Long InstructorID) {
+    @PostMapping(value = "/{InstructorID}/courses/{courseId}/Quiz")
+    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto, @PathVariable Long InstructorID, @PathVariable Long courseId) {
+        // Fetch the course by courseId from the database
+        Course course = courseServices.getCourseById(courseId);
+
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Return error if the course is not found
+        }
+
+        // Create the quiz
         Quiz quiz = new Quiz();
         quiz.setTitle(quizDto.getTitle());
-        quiz.setCourseId(quizDto.getCourseId());  // Use courseId from the body
+        quiz.setCourse(course);  // Set the course object
+
+        // Save the quiz (assuming your quizService creates and saves the quiz)
         Quiz createdQuiz = quizService.createQuiz(quiz);
+
         return ResponseEntity.ok(createdQuiz);
     }
 
