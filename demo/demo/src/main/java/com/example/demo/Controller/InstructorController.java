@@ -1,6 +1,6 @@
 package com.example.demo.Controller;
 
-
+import com.example.demo.Dto.CourseDto;
 import com.example.demo.Models.Course;
 import com.example.demo.Models.Instructor;
 import com.example.demo.Models.Lesson;
@@ -69,7 +69,13 @@ public class InstructorController {
 
     // Create course
     @PostMapping(value = "/{id}/CreateCourse")
-    public ResponseEntity<Course> createCourse(@PathVariable Long id, @RequestBody Course course) {
+    public ResponseEntity<Course> createCourse(@PathVariable Long id, @RequestBody CourseDto courseDto) {
+        Course course = new Course();
+        course.setTitle(courseDto.getTitle());
+        course.setDescription(courseDto.getDescription());
+        course.setDuration(courseDto.getDuration());
+        course.setMediaFiles(courseDto.getMediaFiles());
+        course.setInstructor(instructorServices.getInstructorById(id));
         Course createdCourse = instructorServices.CreateCourse(id, course);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
     }
