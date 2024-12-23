@@ -16,6 +16,10 @@ public class QuizService {
 
     @Autowired
     private CourseServices courseServices;
+    public List<Quiz> getQuizzesByStudentId(Long studentId) {
+        return quizRepository.findByCourse_Enrollments_Student_Id(studentId);
+    }
+
 
     // Create a new quiz
     public Quiz createQuiz(Quiz quiz) {
