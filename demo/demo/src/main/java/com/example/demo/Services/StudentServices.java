@@ -4,8 +4,15 @@ package com.example.demo.Services;
 import com.example.demo.Models.Course;
 import com.example.demo.Models.Enrollment;
 import com.example.demo.Models.Student;
+import com.example.demo.Models.Assignment;
+import com.example.demo.Models.Quiz;
+import com.example.demo.Models.Submission;
 import com.example.demo.Repository.CourseRepo;
 import com.example.demo.Repository.StudentRepo;
+import com.example.demo.Repository.AssignmentRepository;
+import com.example.demo.Repository.SubmissionRepository;
+import com.example.demo.Repository.QuizRepository;
+import com.example.demo.Repository.EnrollmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +87,37 @@ public class StudentServices {
         return allCourses.stream()
                 .filter(course -> !enrolledCourses.contains(course))
                 .collect(Collectors.toList());
+    }
+    @Autowired
+    private EnrollmentRepo enrollmentRepository;
+
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private SubmissionRepository submissionRepository;
+
+    public List<Assignment> getAssignmentsForStudent(Long studentId) {
+        List<Long> courseIds = enrollmentRepository.findCourseIdsByStudentId(studentId);
+        return assignmentRepository.findByCourseIdIn(courseIds);
+    }
+
+    public List<Quiz> getQuizzesForStudent(Long studentId) {
+        List<Long> courseIds = enrollmentRepository.findCourseIdsByStudentId(studentId);
+        return quizRepository.findByCourseIdIn(courseIds);
+    }
+
+    public Submission submitAssignment(Long studentId, Long assignmentId, Submission submission) {
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+
+        submission.setStudent(student);
+        submission.setAssignment(assignment);
+        return submissionRepository.save(submission);
     }
 }
