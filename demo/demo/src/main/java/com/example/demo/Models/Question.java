@@ -1,5 +1,7 @@
 package com.example.demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -16,9 +18,11 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
+    @JsonBackReference
     private Quiz quiz;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Option> options;
 
     // Getters and Setters
