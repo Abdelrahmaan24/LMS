@@ -6,6 +6,8 @@ import com.example.demo.Services.AssignmentService;
 import com.example.demo.Services.CourseServices;
 import com.example.demo.Services.InstructorServices;
 import com.example.demo.Services.QuizService;
+import com.example.demo.Services.OptionService;
+import com.example.demo.Services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -187,8 +189,46 @@ public class InstructorController {
 
         return ResponseEntity.ok(createdQuiz);
     }
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private OptionService optionService;
 
+    @PostMapping("/quiz/{quizId}/question")
+    public ResponseEntity<Question> createQuestion(
+            @PathVariable Long quizId,
+            @RequestBody QuestionDto questionDto) {
 
+        // Fetch the quiz by quizId
+        Quiz quiz = quizService.getQuizById(quizId);
+        if (quiz == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Quiz not found
+        }
 
+        // Create the question
+        Question question = new Question();
+        question.setQuestionText(questionDto.getQuestionText());
+        question.setQuiz(quiz); // Set the quiz for the question
 
+        // Save the question first
+        Question createdQuestion = questionService.createQuestion(question); // Assuming this saves the question
+
+        // Now create the options
+        List<Option> options = new ArrayList<>();
+        for (OptionDto optionDto : questionDto.getOptions()) {
+            Option option = new Option();
+            option.setText(optionDto.getText());
+            option.setIsCorrect(optionDto.getIsCorrect());
+            option.setQuestion(createdQuestion);  // Set the saved question for each option
+            options.add(option);
+        }
+
+        // Save the options after the question is persisted
+        optionService.saveOptions(options); // Now this will work, as saveOptions is defined in OptionService
+
+        // Return the created question along with its options
+        createdQuestion.setOptions(options);  // Optionally, return the options as part of the question response
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdQuestion);
+    }
 }
+
