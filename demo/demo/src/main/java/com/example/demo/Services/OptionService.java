@@ -29,6 +29,14 @@ public class OptionService {
         Optional<Option> option = optionRepository.findById(id); // Use the repository's `findById` method
         return option.orElse(null); // Return the option if present, otherwise null
     }
+    public List<Option> saveOptions(List<Option> options) {
+        return optionRepository.saveAll(options);
+    }
+
+    // Save a single option (if needed)
+    public Option saveOption(Option option) {
+        return optionRepository.save(option);
+    }
 
     // Delete an option by its ID
     public void deleteOption(Long id) {
