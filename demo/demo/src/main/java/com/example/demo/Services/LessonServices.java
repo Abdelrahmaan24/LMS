@@ -85,4 +85,13 @@ public class LessonServices {
         attendance.setAttendanceTime(LocalDateTime.now());
         attendanceRepo.save(attendance);
     }
+
+    public String getOTP(Long id) {
+        Lesson lesson = lessonRepo.findById(id).orElseThrow(() -> new RuntimeException("Lesson not found with ID " + id));
+        if (lesson.getOtpStartTime() != null &&
+                Duration.between(lesson.getOtpStartTime(), LocalDateTime.now()).compareTo(Duration.ofMinutes(15)) > 0) {
+            throw new RuntimeException("The OTP for this lesson has expired.");
+        }
+        return lesson.getOtp();
+    }
 }

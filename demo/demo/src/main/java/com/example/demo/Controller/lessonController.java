@@ -53,6 +53,11 @@ public class lessonController {
         return ResponseEntity.ok("OTP generated");
     }
 
+    @GetMapping("/{id}/otp")
+    public ResponseEntity<String> getOtp(@PathVariable Long id) {
+        String otp = lessonServices.getOTP(id);
+        return ResponseEntity.ok(otp);
+    }
     @PutMapping(path = "{lessonId}/markAttendance")
     public ResponseEntity<String> markAttendance(
             @PathVariable Long lessonId,
