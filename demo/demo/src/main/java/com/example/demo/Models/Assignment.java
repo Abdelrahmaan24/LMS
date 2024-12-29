@@ -1,5 +1,6 @@
 package com.example.demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class Assignment {
     private LocalDateTime dueDate;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Submission> submissions;
 
     @ManyToOne
