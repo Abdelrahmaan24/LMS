@@ -1,4 +1,5 @@
 package com.example.demo.Models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -22,10 +23,12 @@ public class Submission {
 
     @ManyToOne
     @JoinColumn(name = "assignment_id", nullable = false)
+    @JsonBackReference
     private Assignment assignment;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+    @JsonBackReference
     private User student;
 
     // No-argument constructor
