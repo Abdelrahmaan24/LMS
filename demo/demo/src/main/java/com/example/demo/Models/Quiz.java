@@ -1,4 +1,5 @@
 package com.example.demo.Models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +12,7 @@ public class Quiz {
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false) // Establish proper relationship
+    @JsonBackReference
     private Course course;
 
     public Quiz() {
