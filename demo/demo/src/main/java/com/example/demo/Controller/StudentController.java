@@ -1,14 +1,12 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Dto.StudentDto;
-import com.example.demo.Models.Course;
-import com.example.demo.Models.Enrollment;
-import com.example.demo.Models.Student;
+import com.example.demo.Models.*;
+import com.example.demo.Services.AssignmentService;
 import com.example.demo.Services.EnrollmentServices;
 import com.example.demo.Services.StudentServices;
-import com.example.demo.Models.Quiz;
-import com.example.demo.Models.Assignment;
-import com.example.demo.Models.Submission;
+import com.example.demo.Dto.SubmissionDto;
+import com.example.demo.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,10 @@ public class StudentController {
 
     @Autowired
     private StudentServices studentService;
+    @Autowired
+    private AssignmentService assignmentService;
+    @Autowired
+    private UserServices userServices;
 
     @Autowired
     private EnrollmentServices enrollmentService;
@@ -108,10 +110,25 @@ public class StudentController {
     public ResponseEntity<Submission> submitAssignment(
             @PathVariable Long studentId,
             @PathVariable Long assignmentId,
-            @RequestBody Submission submission) {
+            @RequestBody SubmissionDto submissionDto) {
 
+        // Assuming you have methods in your service layer to get the assignment and student by ID.
+        Assignment assignment = assignmentService.getAssignmentById(assignmentId);
+        User student = userServices.getUserById(studentId); // assuming Student extends User, or replace accordingly
+
+        // Create Submission object and set the data from DTO
+        Submission submission = new Submission();
+        submission.setAssignment(assignment);
+        submission.setStudent(student);
+        submission.setSubmissionDate(submissionDto.getSubmissionDate());
+        submission.setFileUrl(submissionDto.getFileUrl());
+        submission.setGrade(submissionDto.getGrade());
+
+        // Save the submission using the service layer
         Submission createdSubmission = studentService.submitAssignment(studentId, assignmentId, submission);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubmission);
     }
+
 
 }
