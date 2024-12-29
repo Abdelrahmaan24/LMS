@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 
+import com.example.demo.Dto.CreateNotificationRequest;
 import com.example.demo.Models.Notification;
 import com.example.demo.Models.User;
 import com.example.demo.Services.NotificationsService;
@@ -24,6 +25,15 @@ public class NotificationController {
         user.setId(userId);
         return notificationsService.getUserNotifications(user, unreadOnly);
     }
+
+    @PostMapping("/{userId}/notifications")
+    public Notification createNotification(
+            @PathVariable Long userId,
+            @RequestBody CreateNotificationRequest request
+    ) {
+        return notificationsService.createNotificationForUser(userId, request);
+    }
+
 
     @PutMapping("/mark-as-read/{notificationId}")
     public void markAsRead(@PathVariable Long notificationId) {

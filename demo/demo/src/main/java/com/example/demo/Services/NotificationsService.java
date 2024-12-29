@@ -1,20 +1,30 @@
 package com.example.demo.Services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.Dto.CreateNotificationRequest;
 import com.example.demo.Models.NotificationType;
 import com.example.demo.Models.Student;
+import com.example.demo.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Models.Notification;
 import com.example.demo.Models.User;
 import com.example.demo.Repository.NotificationsRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class NotificationsService {
     @Autowired
     private NotificationsRepository notificationRepo;
+
+    @Autowired
+    private UserRepo userRepository;
+    @Autowired
+    private NotificationsRepository notificationsRepository;
 
     public void createNotification(User user, String message, NotificationType type) {
         if (user == null) {
@@ -46,5 +56,22 @@ public class NotificationsService {
             notification.setRead(true);
             notificationRepo.save(notification);
         }
+    }
+
+    public Notification createNotificationForUser(Long userId, CreateNotificationRequest request) {
+        // Fetch the user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        // Create a new notification
+        Notification notification = new Notification();
+        notification.setMessage(request.getMessage());
+        notification.setType(NotificationType.valueOf(request.getType())); // Ensure proper type handling
+        notification.setRead(false);
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setUser(user);
+
+        // Save the notification
+        return notificationsRepository.save(notification);
     }
 }

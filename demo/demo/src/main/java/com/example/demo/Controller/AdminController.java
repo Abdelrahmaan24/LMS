@@ -55,7 +55,6 @@ public class AdminController {
         instructor.setRole(instructorDto.getRole());
         Instructor createdInstructor = adminServices.createInstructor(instructor);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdInstructor);
-
     }
 
 
