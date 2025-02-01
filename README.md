@@ -48,5 +48,3 @@ The **Learning Management System (LMS)** is a web-based application designed to 
 - **JUnit** for unit testing.
 
 ---
-
-   git clone https://github.com/your-username/lms-project.git
